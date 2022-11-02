@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  StatusBar
 } from 'react-native';
 import {IconButton, Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -30,6 +31,7 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.Container}>
+    <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF"/>
       <TouchableOpacity>
         <Icon
           name="arrowleft"
@@ -90,24 +92,24 @@ const LoginScreen = () => {
       <View style={styles.Container3}>
         <Text style={styles.text}>Login</Text>
       </View>
-      <View style={{flexDirection: 'row', marginTop: 30, marginStart: 10}}>
+      <View style={{flexDirection: 'row', marginTop: 40, marginStart: 10}}>
         <Image
-          source={require('../images/email_png.png')}
+          source={require('../assets/images/logo_gmail.png')}
           style={{height: 50, width: 50}}
         />
         <Image
-          source={require('../images/facebook_png.png')}
-          style={{height: 50, width: 50}}
+          source={require('../assets/images/facebook_logo.png')}
+          style={{height: 40, width: 40,marginStart: 5}}
         />
       </View>
       <View style={{marginTop: 50, marginStart: 10}}>
         <Text style={{color: 'black'}}>Privacy Policy</Text>
-        <Text style={{color: 'black'}}>Term & Conditions</Text>
+        <Text style={{color: 'black', marginTop: 8}}>Term & Conditions</Text>
       </View>
-      <View style={{alignSelf: 'center', flexDirection: 'row', marginTop: 50}}>
+      {/* <View style={{alignSelf: 'center', flexDirection: 'row', marginTop: 50}}>
         <Text style={{color: 'black'}}>Not a member?</Text>
         <Text style={{color: 'green'}}>Register now</Text>
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -121,32 +123,34 @@ const styles = StyleSheet.create({
   },
   Container1: {
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 40,
   },
   Container2: {
     justifyContent: 'flex-start',
-    marginTop: 40,
+    marginTop: 50,
   },
   Container3: {
     backgroundColor: '#3949AB',
-    width: '80%',
-    padding: 15,
+    width: '90%',
+    padding: 12,
     marginVertical: 5,
     alignItems: 'center',
-    borderRadius: 15,
+    borderRadius: 10,
     alignSelf: 'center',
-    marginTop: 40,
+    marginTop: 50,
   },
   Logo: {
     color: '#3949AB',
     fontSize: 35,
     fontWeight: 'bold',
+    fontFamily: 'Lato'
   },
   iconStyle: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     marginStart: 10,
-    marginTop: 20,
+    marginTop: 10,
+   
   },
   numTextInput: {
     height: 40,
@@ -159,6 +163,8 @@ const styles = StyleSheet.create({
     borderRightColor: 'white',
     borderLeftColor: 'white',
     borderBottomColor: 'gray',
+    fontWeight: 'bold',
+    fontSize: 15
   },
   btnStyle: {
     borderRadius: 50,
@@ -217,6 +223,8 @@ const styles = StyleSheet.create({
     paddingStart: -10,
     fontSize: 15,
     width: '90%',
-    color: 'black'
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 15
   }
 });

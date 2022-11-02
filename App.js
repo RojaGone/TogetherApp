@@ -1,5 +1,5 @@
 import React from 'react';
-import Router from './src/router';
+import Router from './src/Navigations';
 
 const App = () => {
 

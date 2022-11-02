@@ -14,7 +14,7 @@ const Router = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen name="SplashScreen" component={SplashScreen} options={options} /> */}
+        <Stack.Screen name="SplashScreen" component={SplashScreen} options={options} />
         {/* <Stack.Screen name="LoaderScreen" component={LoaderScreen} options={options} /> */}
         <Stack.Screen name="LoginScreen" component={LoginScreen} options={options} />
       </Stack.Navigator>

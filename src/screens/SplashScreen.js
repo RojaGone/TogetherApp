@@ -1,11 +1,20 @@
 import React from 'react';
-import {View, Text, StyleSheet, } from 'react-native';
+import {View, Text, StyleSheet, StatusBar} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
+const TimeoutComponent = () => {
+  const nav = useNavigation();
+  setTimeout(() => {
+    nav.navigate('LoginScreen');
+  }, 6000);
+  
+};
 const LoaderScreen = () => {
   return (
     <View style={styles.Container}>
- 
+    <StatusBar barStyle="#3949AB" backgroundColor="#3949AB" />
       <Text style={styles.Logo}>Together</Text>
+      <TimeoutComponent/>
     </View>
   );
 };
