@@ -6,8 +6,7 @@ const TimeoutComponent = () => {
   const nav = useNavigation();
   setTimeout(() => {
     nav.navigate('LoginScreen');
-  }, 6000);
-  
+  }, 4000);
 };
 const LoaderScreen = () => {
   return (

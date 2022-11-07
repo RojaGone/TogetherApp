@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -6,18 +6,19 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
-  StatusBar
+  StatusBar,
 } from 'react-native';
 import {IconButton, Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon1 from 'react-native-vector-icons/Entypo';
-import {Input} from 'native-base';
+import {useNavigation} from '@react-navigation/native';
 
 const LoginScreen = () => {
   const [text, onChangeText] = React.useState('');
   const [password, setPassword] = useState('');
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [rightIcon, setRightIcon] = useState('eye-with-line');
+  const nav = useNavigation();
 
   const handlePasswordVisibility = () => {
     if (rightIcon === 'eye') {
@@ -29,9 +30,13 @@ const LoginScreen = () => {
     }
   };
 
+  const LoginBtn = () => {
+    nav.navigate('HomePage');
+  };
+
   return (
     <View style={styles.Container}>
-    <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF"/>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <TouchableOpacity>
         <Icon
           name="arrowleft"
@@ -67,12 +72,10 @@ const LoginScreen = () => {
           name="password"
           placeholder="Enter your password"
           placeholderTextColor={'gray'}
-          
           value={password}
-          
           onChangeText={text => setPassword(text)}
           secureTextEntry={passwordVisibility}
-          />
+        />
         <TouchableOpacity onPress={handlePasswordVisibility}>
           <Icon1
             name={rightIcon}
@@ -89,8 +92,10 @@ const LoginScreen = () => {
         </Text>
       </View>
 
-      <View style={styles.Container3}>
-        <Text style={styles.text}>Login</Text>
+      <View>
+        <Text style={styles.text} onPress={LoginBtn}>
+          Login
+        </Text>
       </View>
       <View style={{flexDirection: 'row', marginTop: 40, marginStart: 10}}>
         <Image
@@ -99,7 +104,7 @@ const LoginScreen = () => {
         />
         <Image
           source={require('../assets/images/facebook_logo.png')}
-          style={{height: 40, width: 40,marginStart: 5}}
+          style={{height: 40, width: 40, marginStart: 5}}
         />
       </View>
       <View style={{marginTop: 50, marginStart: 10}}>
@@ -129,28 +134,17 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     marginTop: 50,
   },
-  Container3: {
-    backgroundColor: '#3949AB',
-    width: '90%',
-    padding: 12,
-    marginVertical: 5,
-    alignItems: 'center',
-    borderRadius: 10,
-    alignSelf: 'center',
-    marginTop: 50,
-  },
   Logo: {
     color: '#3949AB',
     fontSize: 35,
     fontWeight: 'bold',
-    fontFamily: 'Lato'
+    fontFamily: 'Lato',
   },
   iconStyle: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     marginStart: 10,
     marginTop: 10,
-   
   },
   numTextInput: {
     height: 40,
@@ -164,7 +158,7 @@ const styles = StyleSheet.create({
     borderLeftColor: 'white',
     borderBottomColor: 'gray',
     fontWeight: 'bold',
-    fontSize: 15
+    fontSize: 15,
   },
   btnStyle: {
     borderRadius: 50,
@@ -184,6 +178,16 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 17,
+    width: '80%',
+    padding: 12,
+    marginVertical: 5,
+    alignItems: 'center',
+    borderRadius: 10,
+    alignSelf: 'center',
+    marginTop: 50,
+    backgroundColor: '#3949AB',
+    textAlign: 'center',
+    textAlignVertical: 'center',
   },
   searchSection: {
     flex: 1,
@@ -225,6 +229,6 @@ const styles = StyleSheet.create({
     width: '90%',
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 15
-  }
+    fontSize: 15,
+  },
 });
