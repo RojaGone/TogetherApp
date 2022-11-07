@@ -1,5 +1,13 @@
 import React from 'react';
-import {View, Text, StyleSheet, TextInput, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Image,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Card} from 'react-native-shadow-cards';
 import Icon from 'react-native-vector-icons/Feather';
@@ -16,6 +24,12 @@ const SeatingArrangementPage1 = () => {
   const [boxPrice, onChangeBoxPrice] = React.useState('');
   const [seatsPerBox, onChangeSeatsPerBox] = React.useState('');
   const [seatPrice, onChangeSeatPrice] = React.useState('');
+  const [images, setimages] = React.useState([
+    require('../assets/images/melbourne-cricket-ground-26.png'),
+    require('../assets/images/pitch.jpg'),
+    require('../assets/images/Raipur_International_Cricket_Stadium.png'),
+  ]);
+  var count = images.length;
   bs = React.createRef();
   fall = new Animated.Value(1);
 
@@ -94,22 +108,23 @@ const SeatingArrangementPage1 = () => {
   );
 
   const SetValueFunc = () => {
-    bs.current.snapTo(1)
+    bs.current.snapTo(1);
   };
 
   const renderHeader = () => (
     <View style={styles.header} onStartShouldSetResponder={SetValueFunc}>
       <View style={styles.panelHeader}>
-        <View style={styles.panelHandle}>
-        </View>
+        <View style={styles.panelHandle}></View>
       </View>
     </View>
   );
 
   return (
+    <ScrollView >
     <View style={styles.Container}>
       <Animated.View
         style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}>
+         
         <Text style={styles.txt1}>Total Capacity</Text>
         <TextInput
           style={styles.EventNameStyl}
@@ -163,59 +178,108 @@ const SeatingArrangementPage1 = () => {
             keyboardType="numeric"
           />
         </View>
+        
         <Text style={styles.txt1}>Select layout or upload custom layout</Text>
+       
+        <FlatList
+        
+          data={images}
+          renderItem={({item, index}) => (
+            <View
+              style={{
+                flex: 0.5,
+                width: '50%',
+                flexDirection: 'column',
+                height: 120,
+                marginBottom:
+                  count % 2 == 0 ? (index == count - 2 ? 130 : null) : 0,
+              }}>
+              {count % 2 == 0 ? (
+                <Card style={styles.cardStylEven}>
+                  <Image
+                    source={item}
+                    key={index}
+                    style={styles.imageThumbnail}
+                  />
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-          <Card style={styles.cardStyl}>
-            <Image
-              source={require('../assets/images/melbourne-cricket-ground-26.png')}
-              style={styles.imgStyl}
-            />
-          </Card>
-          <Card style={styles.cardStyl}>
-            <Image
-              source={require('../assets/images/pitch.jpg')}
-              style={styles.imgStyl}
-            />
-          </Card>
-        </View>
-
-        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-          <Card style={styles.cardStyl}>
-            <Image
-              source={require('../assets/images/Raipur_International_Cricket_Stadium.png')}
-              style={styles.imgStyl}
-            />
-          </Card>
-          <Card
-            style={{
-              width: '45%',
-              height: 120,
-              marginTop: 20,
-              borderRadius: 10,
-              borderWidth: 1,
-              borderColor: 'gray',
-            }}>
-            {/* <Image
-            source={require('../assets/images/pitch.jpg')}
-            style={styles.imgStyl}
-          /> */}
-            <Text style={{color: 'gray', alignSelf: 'center', marginTop: 20}}>
-              Upload Custom Layout
-            </Text>
-            <Icon
-              name="upload"
-              size={25}
-              color="#121110"
-              style={styles.iconStyle}
-              onPress={UploadBtnComponent}
-            />
-          </Card>
-        </View>
-
+                  {console.log('even value : ', count)}
+                  {index == count - 2 ? (
+                    <Card
+                      style={{
+                        width: '100%',
+                        height: 100,
+                        marginTop: 10,
+                        borderRadius: 10,
+                        borderWidth: 1,
+                        borderColor: 'gray',
+                        alignSelf: 'flex-start',
+                      }}>
+                      <Text
+                        style={{
+                          color: 'gray',
+                          alignSelf: 'center',
+                          marginTop: 20,
+                        }}>
+                        Upload Custom Layout
+                      </Text>
+                      <Icon
+                        name="upload"
+                        size={25}
+                        color="#121110"
+                        style={styles.iconStyle}
+                        onPress={UploadBtnComponent}
+                      />
+                    </Card>
+                  ) : null}
+                </Card>
+              ) : (
+                <Card style={styles.cardStylOdd}>
+                  <Image
+                    source={item}
+                    key={index}
+                    style={styles.imageThumbnail}
+                  />
+                  {console.log('odd value : ', count)}
+                  {index == count - 1 ? (
+                    <Card
+                      style={{
+                        width: '100%',
+                        height: 100,
+                        marginStart: 27,
+                        borderRadius: 10,
+                        borderWidth: 1,
+                        borderColor: 'gray',
+                      }}>
+                      <Text
+                        style={{
+                          color: 'gray',
+                          alignSelf: 'center',
+                          marginTop: 20,
+                        }}>
+                        Upload Custom Layout
+                      </Text>
+                      <Icon
+                        name="upload"
+                        size={25}
+                        color="#121110"
+                        style={styles.iconStyle}
+                        onPress={UploadBtnComponent}
+                      />
+                    </Card>
+                  ) : null}
+                </Card>
+              )}
+            </View>
+          )}
+          //Setting the number of column
+          numColumns={2}
+          keyExtractor={(item, index) => index}
+        />
+       
         <Text style={styles.Btn} onPress={NextBtn}>
           Next
         </Text>
+        
       </Animated.View>
       <BottomSheet
         ref={bs}
@@ -229,6 +293,7 @@ const SeatingArrangementPage1 = () => {
         enabledContentGestureInteraction={true}
       />
     </View>
+    </ScrollView>
   );
 };
 
@@ -311,14 +376,17 @@ const styles = StyleSheet.create({
     width: '45%',
   },
   cardStyl: {
-    width: '45%',
-    height: 120,
-    marginTop: 20,
+    width: '87%',
+    height: 100,
     borderRadius: 10,
+    alignSelf: 'center',
+    margin: 15,
+    marginTop: 10,
+    flexDirection: 'row',
   },
   imgStyl: {
-    height: 120,
-    width: '100%',
+    height: 100,
+    width: '150%',
     borderRadius: 10,
   },
   iconStyle: {
@@ -358,5 +426,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     textAlignVertical: 'center',
+  },
+  imageThumbnail: {
+    height: 100,
+    width: '100%',
+    borderRadius: 10,
+    alignSelf: 'center',
+  },
+  cardStylEven: {
+    borderRadius: 10,
+    width: '87%',
+    height: 100,
+    alignSelf: 'center',
+    justifyContent: 'flex-start',
+    marginTop: 10,
+    flexDirection: 'column',
+  },
+  cardStylOdd: {
+    borderRadius: 10,
+    width: '87%',
+    height: 100,
+    alignSelf: 'center',
+    margin: 15,
+    marginTop: 10,
+    flexDirection: 'row',
   },
 });
