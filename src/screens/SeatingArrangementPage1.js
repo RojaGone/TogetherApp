@@ -16,6 +16,7 @@ import Animated, {set} from 'react-native-reanimated';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CameraIcon from 'react-native-vector-icons/SimpleLineIcons';
 import GalleryIcon from 'react-native-vector-icons/EvilIcons';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const SeatingArrangementPage1 = () => {
   const nav = useNavigation();
@@ -24,11 +25,8 @@ const SeatingArrangementPage1 = () => {
   const [boxPrice, onChangeBoxPrice] = React.useState('');
   const [seatsPerBox, onChangeSeatsPerBox] = React.useState('');
   const [seatPrice, onChangeSeatPrice] = React.useState('');
-  const [images, setimages] = React.useState([
-    require('../assets/images/melbourne-cricket-ground-26.png'),
-    require('../assets/images/pitch.jpg'),
-    require('../assets/images/Raipur_International_Cricket_Stadium.png'),
-  ]);
+  const [images, setimages] = React.useState([]);
+
   var count = images.length;
   bs = React.createRef();
   fall = new Animated.Value(1);
@@ -40,6 +38,28 @@ const SeatingArrangementPage1 = () => {
 
   const UploadBtnComponent = () => {
     bs.current.snapTo(0);
+  };
+
+  const TakePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      setimages(images => [...images, image.path])
+      bs.current.snapTo(1);
+    });
+  };
+
+  const ChoosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      setimages(images => [...images, image.path])
+      bs.current.snapTo(1);
+    });
   };
 
   const renderInner = () => (
@@ -71,15 +91,18 @@ const SeatingArrangementPage1 = () => {
             borderRadius: 10,
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
+          }}
+          onPress={TakePhotoFromCamera}>
           <CameraIcon
             name="camera"
             size={30}
             color="#3949AB"
             style={styles.CameraIconStyle}
-            onPress={UploadBtnComponent}
+            onPress={TakePhotoFromCamera}
           />
-          <Text style={{color: 'black', fontWeight: '700', fontSize: 20}}>
+          <Text
+            style={{color: 'black', fontWeight: '700', fontSize: 20}}
+            onPress={TakePhotoFromCamera}>
             Camera
           </Text>
         </Card>
@@ -91,15 +114,18 @@ const SeatingArrangementPage1 = () => {
             borderRadius: 10,
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
+          }}
+          onPress={ChoosePhotoFromLibrary}>
           <GalleryIcon
             name="image"
             size={40}
             color="#3949AB"
             style={styles.GalleryIconStyle}
-            onPress={UploadBtnComponent}
+            onPress={ChoosePhotoFromLibrary}
           />
-          <Text style={{color: 'black', fontWeight: '700', fontSize: 20}}>
+          <Text
+            style={{color: 'black', fontWeight: '700', fontSize: 20}}
+            onPress={ChoosePhotoFromLibrary}>
             Gallery
           </Text>
         </Card>
@@ -120,11 +146,9 @@ const SeatingArrangementPage1 = () => {
   );
 
   return (
-    <ScrollView >
     <View style={styles.Container}>
       <Animated.View
         style={{opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))}}>
-         
         <Text style={styles.txt1}>Total Capacity</Text>
         <TextInput
           style={styles.EventNameStyl}
@@ -178,108 +202,138 @@ const SeatingArrangementPage1 = () => {
             keyboardType="numeric"
           />
         </View>
-        
+        {/* <Image
+          source={{uri: images}}
+          style={{height: 45, width: 45, marginStart: 15}}
+        /> */}
         <Text style={styles.txt1}>Select layout or upload custom layout</Text>
-       
-        <FlatList
-        
-          data={images}
-          renderItem={({item, index}) => (
-            <View
-              style={{
-                flex: 0.5,
-                width: '50%',
-                flexDirection: 'column',
-                height: 120,
-                marginBottom:
-                  count % 2 == 0 ? (index == count - 2 ? 130 : null) : 0,
-              }}>
-              {count % 2 == 0 ? (
-                <Card style={styles.cardStylEven}>
-                  <Image
-                    source={item}
-                    key={index}
-                    style={styles.imageThumbnail}
-                  />
 
-                  {console.log('even value : ', count)}
-                  {index == count - 2 ? (
-                    <Card
-                      style={{
-                        width: '100%',
-                        height: 100,
-                        marginTop: 10,
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        borderColor: 'gray',
-                        alignSelf: 'flex-start',
-                      }}>
-                      <Text
+        {count == 0 ? (
+          <Card
+            style={{
+              width: '50%',
+              height: 100,
+              marginTop: 20,
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: 'gray',
+              alignSelf: 'flex-start',
+              marginStart: 15,
+            }}>
+            <Text
+              style={{
+                color: 'gray',
+                alignSelf: 'center',
+                marginTop: 20,
+              }}>
+              Upload Custom Layout
+            </Text>
+            <Icon
+              name="upload"
+              size={25}
+              color="#121110"
+              style={styles.iconStyle}
+              onPress={UploadBtnComponent}
+            />
+          </Card>
+        ) : (
+          <View style={{minHeight: '0%', maxHeight: '37%', marginTop: 10}}>
+            <FlatList
+              data={images}
+              renderItem={({item, index}) => (
+                <View
+                style={{
+                  flex: 0.5,
+                  width: '50%',
+                  flexDirection: 'column',
+                  height: 120,
+                  marginBottom:
+                    count % 2 == 0 ? (index == count - 2 ? 130 : null) : 0,
+                }}>
+                {count % 2 == 0 ? (
+                  <Card style={styles.cardStylEven}>
+                    <Image
+                      source={{uri: item}}
+                      key={index}
+                      style={styles.imageThumbnail}
+                    />
+                    {index == count - 2 ? (
+                      <Card
                         style={{
-                          color: 'gray',
-                          alignSelf: 'center',
+                          width: '100%',
+                          height: 100,
                           marginTop: 20,
+                          borderRadius: 10,
+                          borderWidth: 1,
+                          borderColor: 'gray',
+                          alignSelf: 'flex-start',
                         }}>
-                        Upload Custom Layout
-                      </Text>
-                      <Icon
-                        name="upload"
-                        size={25}
-                        color="#121110"
-                        style={styles.iconStyle}
-                        onPress={UploadBtnComponent}
-                      />
-                    </Card>
-                  ) : null}
-                </Card>
-              ) : (
-                <Card style={styles.cardStylOdd}>
-                  <Image
-                    source={item}
-                    key={index}
-                    style={styles.imageThumbnail}
-                  />
-                  {console.log('odd value : ', count)}
-                  {index == count - 1 ? (
-                    <Card
-                      style={{
-                        width: '100%',
-                        height: 100,
-                        marginStart: 27,
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        borderColor: 'gray',
-                      }}>
-                      <Text
+                        <Text
+                          style={{
+                            color: 'gray',
+                            alignSelf: 'center',
+                            marginTop: 20,
+                          }}>
+                          Upload Custom Layout
+                        </Text>
+                        <Icon
+                          name="upload"
+                          size={25}
+                          color="#121110"
+                          style={styles.iconStyle}
+                          onPress={UploadBtnComponent}
+                        />
+                      </Card>
+                    ) : null}
+                  </Card>
+                ) : (
+                  <Card style={styles.cardStylOdd}>
+                    <Image
+                       source={{uri: item}}
+                      key={index}
+                      style={styles.imageThumbnail}
+                    />
+                    {index == count - 1 ? (
+                      <Card
                         style={{
-                          color: 'gray',
-                          alignSelf: 'center',
-                          marginTop: 20,
+                          width: '100%',
+                          height: 100,
+                          marginStart: 27,
+                          borderRadius: 10,
+                          borderWidth: 1,
+                          borderColor: 'gray',
                         }}>
-                        Upload Custom Layout
-                      </Text>
-                      <Icon
-                        name="upload"
-                        size={25}
-                        color="#121110"
-                        style={styles.iconStyle}
-                        onPress={UploadBtnComponent}
-                      />
-                    </Card>
-                  ) : null}
-                </Card>
+                        <Text
+                          style={{
+                            color: 'gray',
+                            alignSelf: 'center',
+                            marginTop: 20,
+                          }}>
+                          Upload Custom Layout
+                        </Text>
+                        <Icon
+                          name="upload"
+                          size={25}
+                          color="#121110"
+                          style={styles.iconStyle}
+                          onPress={UploadBtnComponent}
+                        />
+                      </Card>
+                    ) : null}
+                  </Card>
+                )}
+              </View>
               )}
-            </View>
-          )}
-          //Setting the number of column
-          numColumns={2}
-          keyExtractor={(item, index) => index}
-        />
-       
+              //Setting the number of column
+              numColumns={2}
+              keyExtractor={(item, index) => index}
+            />
+          </View>
+        )}
+
         <Text style={styles.Btn} onPress={NextBtn}>
           Next
         </Text>
-        
       </Animated.View>
       <BottomSheet
         ref={bs}
@@ -293,7 +347,6 @@ const SeatingArrangementPage1 = () => {
         enabledContentGestureInteraction={true}
       />
     </View>
-    </ScrollView>
   );
 };
 
@@ -326,6 +379,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     marginTop: 50,
     alignSelf: 'center',
+    marginBottom: 70,
   },
   txt1: {
     color: 'black',
