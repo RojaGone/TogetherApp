@@ -1,9 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, TextInput, Switch} from 'react-native';
+import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Card} from 'react-native-shadow-cards';
 import SwitchSelector from 'react-native-switch-selector';
 import Icon from 'react-native-vector-icons/AntDesign';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from 'moment';
 
 const EventInformationPage = () => {
   const nav = useNavigation();
@@ -18,6 +20,38 @@ const EventInformationPage = () => {
   const [isChecked1, setIsChecked1] = React.useState(true);
   const [isChecked2, setIsChecked2] = React.useState(true);
   const [isChecked3, setIsChecked3] = React.useState(true);
+  const [isStartDatePickerVisible, setStartDatePickerVisibility] = React.useState(false);
+  const [isEndDatePickerVisible, setEndDatePickerVisibility] = React.useState(false);
+  const [selectedStartDate, setSelectedStartDate] = React.useState("");
+  const [selecteEndDate, setSelectedEndDate] = React.useState("");
+
+
+  moment.locale('en')
+  const showStartDatePicker = () => {
+    setStartDatePickerVisibility(true);
+  };
+
+  const hideStartDatePicker = () => {
+    setStartDatePickerVisibility(false);
+  };
+
+  const handleStartConfirm = (date) => {
+    setSelectedStartDate(date);
+    hideStartDatePicker();
+  };
+
+  const showEndDatePicker = () => {
+    setEndDatePickerVisibility(true);
+  };
+
+  const hideEndDatePicker = () => {
+    setEndDatePickerVisibility(false);
+  };
+
+  const handleEndConfirm = (date) => {
+    setSelectedEndDate(date);
+    hideEndDatePicker();
+  };
 
   const NextBtn = () => {
     nav.navigate('SeatingArrangementPage1');
@@ -84,21 +118,42 @@ const EventInformationPage = () => {
           End date
         </Text>
       </View>
+      {/* <Button title="Show Date Picker" onPress={showDatePicker} /> */}
+      <DateTimePickerModal
+        isVisible={isStartDatePickerVisible}
+        mode="datetime"
+        onConfirm={handleStartConfirm}
+        onCancel={hideStartDatePicker}
+      />
+       <DateTimePickerModal
+        isVisible={isEndDatePickerVisible}
+        mode="datetime"
+        onConfirm={handleEndConfirm}
+        onCancel={hideEndDatePicker}
+      />
       <View style={styles.Container2}>
-        <TextInput
+      <TouchableOpacity onPress={showStartDatePicker}>
+      {/* <TextInput
           style={styles.StartDateStyl}
           onChangeText={onChangeStartDateText}
           value={startDateText}
           placeholder="10May2022 14:23PM"
           placeholderTextColor={'black'}
-        />
-        <TextInput
+          
+        /> */}
+        <Text style={{color:"black", borderWidth: 1, borderColor: 'gray', borderRadius: 5, padding: 15, minWidth: "45%", marginStart: 10}}>{selectedStartDate == "" ? "10May2022 14:23PM" : moment(selectedStartDate).format("DD MMM YYYY LT")}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={showEndDatePicker}>
+
+        {/* <TextInput
           style={styles.EndDateStyl}
           onChangeText={onChangeEndDateText}
           value={endDateText}
           placeholder="15May2022 14:23PM"
           placeholderTextColor={'black'}
-        />
+        /> */}
+        <Text style={{color:"black", borderWidth: 1, borderColor: 'gray', borderRadius: 5, padding: 15, minWidth: "45%",marginEnd: 10}}>{selecteEndDate == "" ? "10May2022 14:23PM" : moment(selecteEndDate).format("DD MMM YYYY LT")}</Text>
+      </TouchableOpacity>
       </View>
       <View style={styles.Container3}>
         <Text style={styles.privateEventTxtStyl}>Private Event</Text>
